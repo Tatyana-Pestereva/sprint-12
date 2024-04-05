@@ -3,16 +3,21 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+// using namespace std;
+using namespace std::literals;
 
-class BookReadingStimul {
+class EBook {
+
+const int MAX_PAGE = 1000000;
+const int MAX_READER = 1000;
+
 public:    
-    BookReadingStimul()
-        : num_pages_(1000000, 0)
-        , count_readers_(1000, 0)
+    EBook()
+        : num_pages_(MAX_PAGE, 0)
+        , count_readers_(MAX_READER, 0)
     {}
     
-    double GetPercentFewerPages(int user) {
+    double Cheer(int user) {
         if (num_pages_[user] == 0) {
             return 0;
         }
@@ -22,7 +27,7 @@ public:
         return (count_readers_[1] - count_readers_[num_pages_[user]]) * 1.0 / (count_readers_[1] - 1);
     }
 
-    void SavePageReading(int user, int page) {
+    void Read(int user, int page) {
         int last_page = num_pages_[user];
         for (int i = last_page + 1; i <= page; i++) {
             count_readers_[i]++;
@@ -30,36 +35,31 @@ public:
         num_pages_[user] = page;
     }
 
-
 private:
-    vector<int> num_pages_;         // номер страницы, до которой дочитал пользователь
-    vector<int> count_readers_;     // кол-во читателей, дочитавших до данной страницы
+    std::vector<int> num_pages_;         // номер страницы, до которой дочитал пользователь
+    std::vector<int> count_readers_;     // кол-во читателей, дочитавших до данной страницы
 };
 
-
-
 int main() {
-    BookReadingStimul reading;
+    EBook reading;
 
     int count = 0;
-    int user = 0;
-    
-    string command;
-
-    cin >> count;
+    std::cin >> count;
 
     for (int i = 0; i < count; i++) {
-        cin >> command;
-        cin >> user;
+        std::string command;
+        int user = 0;
+
+        std::cin >> command;
+        std::cin >> user;
 
         if (command == "CHEER"s) {
-            cout << setprecision(6) << reading.GetPercentFewerPages(user) << endl; 
+            std::cout << std::setprecision(6) << reading.Cheer(user) << std::endl; 
         } else if (command == "READ"s) {
             int page = 0;
-            cin >> page;
+            std::cin >> page;
             
-            reading.SavePageReading(user, page);
+            reading.Read(user, page);
         }
     }
-
 }
